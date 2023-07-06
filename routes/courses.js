@@ -1,55 +1,34 @@
-import mongoose from "mongoose";
-const { Schema } = mongoose;
+import express, { Router } from "express";
+import { createError } from "../utils/error.js";
+import {
+  changeCourseStatus,
+  createCourse,
+  deleteCourse,
+  getCourse,
+  getCourses,
+  updateCourse,
+} from "../controllers/courseController.js";
 
-const CourseSchema = new mongoose.Schema({
-  courseName: {
-    type: String,
-    required: true,
-  },
-  
-  description: {
-    type: String,
-    required: true,
-  },
-  
-  courseCategory: {
-    type: String,
-    required: true,
-  },
-  instructor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  instructorName: {
-    type: String,
-    required: true,
-  },
-  courseCover: {
-    type: Array,
-  },
-  rating: {
-    type: Number,
-    min: 0,
-    max: 5,
-  },
-  suspended: {
-    type: Boolean,
-    default: false,
-  },
-  lessons: [{
-    title: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: true
-    },
-    material: {
-      type: Array,
-    },
-  }],
-},{timestamps: true});
 
-export default mongoose.model("Course", CourseSchema);
+const router = express.Router();
+
+//CREATE
+router.post("/", createCourse);
+
+//UPDATE
+router.put("/:id",  updateCourse);
+
+//DELETE
+router.delete("/:id", deleteCourse);
+
+//GET
+router.get("/:id", getCourse);
+
+//GETALL
+router.get("/", getCourses);
+
+//change the course status
+router.patch("/:courseId/changeStatus", changeCourseStatus);
+
+
+export default router;
